@@ -13,7 +13,9 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
   final _txtConsumo = TextEditingController();
   String _resultado = "";
 
-  _calcularPaneles() {}
+  void _calcularPaneles() {
+    _resultado = "";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,44 +25,49 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
         child: Form(
           child: Column(
             children: [
-              DropdownButtonFormField(items: null, onChanged: null),
+              DropdownButtonFormField(items: const [], onChanged: (valor) {}),
               const SizedBox(height: 16),
               Row(
                 children: [
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Desde"),
-                    readOnly: true,
-                    onTap: () async {
-                      final valorSeleccionado = await showDatePicker(
-                        context: context,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now(),
-                        initialDate: _desde,
-                      );
-                      if (valorSeleccionado != null) {
-                        setState(() {
-                          _desde = valorSeleccionado;
-                        });
-                      }
-                    },
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(labelText: "Desde"),
+                      readOnly: true,
+                      onTap: () async {
+                        final valorSeleccionado = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime.now(),
+                          initialDate: _desde,
+                        );
+                        if (valorSeleccionado != null) {
+                          setState(() {
+                            _desde = valorSeleccionado;
+                          });
+                        }
+                      },
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Hasta"),
-                    readOnly: true,
-                    onTap: () async {
-                      final valorSeleccionado = await showDatePicker(
-                        context: context,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now(),
-                        initialDate: _hasta,
-                      );
-                      if (valorSeleccionado != null) {
-                        setState(() {
-                          _hasta = valorSeleccionado;
-                        });
-                      }
-                    },
+                  Expanded(
+                    child: 
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: "Hasta"),
+                      readOnly: true,
+                      onTap: () async {
+                        final valorSeleccionado = await showDatePicker(
+                          context: context,
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime.now(),
+                          initialDate: _hasta,
+                        );
+                        if (valorSeleccionado != null) {
+                          setState(() {
+                            _hasta = valorSeleccionado;
+                          });
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -88,10 +95,7 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
                 child: const Text("Calcular Paneles"),
               ),
               const SizedBox(height: 16),
-              Text(
-                _resultado,
-                textAlign: TextAlign.center,
-                ),
+              Text(_resultado, textAlign: TextAlign.center),
             ],
           ),
         ),

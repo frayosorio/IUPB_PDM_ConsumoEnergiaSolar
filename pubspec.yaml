@@ -56,7 +56,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-   - assets/datos/capitales_colombia.json
+    - assets/datos/capitales_colombia.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,3 +1,5 @@
+import 'package:consumo_energia_solar/modelos/ciudad.dart';
+import 'package:consumo_energia_solar/servicios/ciudad_servicio.dart';
 import 'package:flutter/material.dart';
 
 class CalculadoraPaneles extends StatefulWidget {
@@ -12,9 +14,18 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
   DateTime _hasta = DateTime.now();
   final _txtConsumo = TextEditingController();
   String _resultado = "";
+  final CiudadServicio _ciudadesServicio = CiudadServicio();
+  List<Ciudad> _ciudades = [];
 
   void _calcularPaneles() {
     _resultado = "";
+  }
+
+  Future<void> _cargarCiudades() async {
+    try {
+      final ciudades = await _ciudadesServicio.cargarCiudades();
+      _ciudades = ciudades;
+    } catch (e) {}
   }
 
   @override
@@ -25,7 +36,15 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
         child: Form(
           child: Column(
             children: [
-              DropdownButtonFormField(items: const [], onChanged: (valor) {}),
+              DropdownButtonFormField<Ciudad>(
+                items: _ciudades.map((c) {
+                  return DropdownMenuItem<Ciudad>(
+                    value: c,
+                    child: Text(c.nombre),
+                  );
+                }).toList(),
+                onChanged: (valor) {},
+              ),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -50,8 +69,7 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
                   ),
                   const SizedBox(height: 16),
                   Expanded(
-                    child: 
-                    TextFormField(
+                    child: TextFormField(
                       decoration: const InputDecoration(labelText: "Hasta"),
                       readOnly: true,
                       onTap: () async {

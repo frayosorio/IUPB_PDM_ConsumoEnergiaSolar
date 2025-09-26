@@ -17,6 +17,9 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
   final CiudadServicio _ciudadesServicio = CiudadServicio();
   List<Ciudad> _ciudades = [];
 
+  // Variable de estado para controlar la carga
+  bool _cargando = true;
+
   void _calcularPaneles() {
     _resultado = "";
   }
@@ -24,8 +27,16 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
   Future<void> _cargarCiudades() async {
     try {
       final ciudades = await _ciudadesServicio.cargarCiudades();
-      _ciudades = ciudades;
-    } catch (e) {}
+      setState(() {
+        _ciudades = ciudades;
+        _cargando = false;
+      });
+    } catch (e) {
+      setState(() {
+        _cargando = false;
+        _resultado = 'Error al cargar los datos. Revisa el archivo JSON.';
+      });
+    }
   }
 
   @override
@@ -42,15 +53,19 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
         child: Form(
           child: Column(
             children: [
-              DropdownButtonFormField<Ciudad>(
-                items: _ciudades.map((ciudad) {
-                  return DropdownMenuItem<Ciudad>(
-                    value: ciudad,
-                    child: Text(ciudad.nombre),
-                  );
-                }).toList(),
-                onChanged: (valor) {},
-              ),
+              if (_cargando)
+                const Center(child: CircularProgressIndicator())
+              else
+                  DropdownButtonFormField<Ciudad>(
+                    items: _ciudades.map((ciudad) {
+                      return DropdownMenuItem<Ciudad>(
+                        value: ciudad,
+                        child: Text(ciudad.nombre),
+                      );
+                    }).toList(),
+                    onChanged: (valor) {},
+                  )
+                ,
               const SizedBox(height: 16),
               Row(
                 children: [

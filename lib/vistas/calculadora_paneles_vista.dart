@@ -29,6 +29,12 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _cargarCiudades();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Calculadora de Paneles Solares')),
@@ -37,10 +43,10 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
           child: Column(
             children: [
               DropdownButtonFormField<Ciudad>(
-                items: _ciudades.map((c) {
+                items: _ciudades.map((ciudad) {
                   return DropdownMenuItem<Ciudad>(
-                    value: c,
-                    child: Text(c.nombre),
+                    value: ciudad,
+                    child: Text(ciudad.nombre),
                   );
                 }).toList(),
                 onChanged: (valor) {},

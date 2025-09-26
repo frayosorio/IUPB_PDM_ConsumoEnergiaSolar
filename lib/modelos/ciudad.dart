@@ -9,11 +9,11 @@ class Ciudad{
     required this.longitud,
   }); 
 
-  factory Ciudad.fromJson(Map<String, dynamic> json){
+  factory Ciudad.fromJson(Map<String, dynamic> objetoJson){
     return Ciudad(
-      nombre: json["nombre"],
-      latitud: json["latitud"],
-      longitud: json["longitud"]
+      nombre: objetoJson["nombre"],
+      latitud: objetoJson["latitud"],
+      longitud: objetoJson["longitud"]
     );
   }
 }

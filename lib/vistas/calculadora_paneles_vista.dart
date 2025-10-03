@@ -10,9 +10,12 @@ class CalculadoraPaneles extends StatefulWidget {
 }
 
 class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
+  final _formKey = GlobalKey<FormState>();
+
   DateTime _desde = DateTime.now();
   DateTime _hasta = DateTime.now();
   final _txtConsumo = TextEditingController();
+
   String _resultado = "";
   final CiudadServicio _ciudadesServicio = CiudadServicio();
   List<Ciudad> _ciudades = [];
@@ -21,7 +24,9 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
   bool _cargando = true;
 
   void _calcularPaneles() {
-    _resultado = "";
+    if (_formKey.currentState!.validate()) {
+      //_resultado = "";
+    }
   }
 
   Future<void> _cargarCiudades() async {
@@ -56,16 +61,15 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
               if (_cargando)
                 const Center(child: CircularProgressIndicator())
               else
-                  DropdownButtonFormField<Ciudad>(
-                    items: _ciudades.map((ciudad) {
-                      return DropdownMenuItem<Ciudad>(
-                        value: ciudad,
-                        child: Text(ciudad.nombre),
-                      );
-                    }).toList(),
-                    onChanged: (valor) {},
-                  )
-                ,
+                DropdownButtonFormField<Ciudad>(
+                  items: _ciudades.map((ciudad) {
+                    return DropdownMenuItem<Ciudad>(
+                      value: ciudad,
+                      child: Text(ciudad.nombre),
+                    );
+                  }).toList(),
+                  onChanged: (valor) {},
+                ),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -73,6 +77,9 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
                     child: TextFormField(
                       decoration: const InputDecoration(labelText: "Desde"),
                       readOnly: true,
+                      controller: TextEditingController(
+                        text: _desde.toString().substring(0, 10),
+                      ),
                       onTap: () async {
                         final valorSeleccionado = await showDatePicker(
                           context: context,
@@ -93,6 +100,9 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
                     child: TextFormField(
                       decoration: const InputDecoration(labelText: "Hasta"),
                       readOnly: true,
+                      controller: TextEditingController(
+                        text: _hasta.toString().substring(0, 10),
+                      ),
                       onTap: () async {
                         final valorSeleccionado = await showDatePicker(
                           context: context,

@@ -32,5 +32,6 @@ class NasaApiServicio {
         return promedioRadiacion;
       }
     }
+    return 0.0;
   }
 }

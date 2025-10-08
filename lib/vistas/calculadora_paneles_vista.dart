@@ -1,5 +1,6 @@
 import 'package:consumo_energia_solar/modelos/ciudad.dart';
 import 'package:consumo_energia_solar/servicios/ciudad_servicio.dart';
+import 'package:consumo_energia_solar/servicios/nasa_api_servicio.dart';
 import 'package:flutter/material.dart';
 
 class CalculadoraPaneles extends StatefulWidget {
@@ -11,6 +12,8 @@ class CalculadoraPaneles extends StatefulWidget {
 
 class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
   final _formKey = GlobalKey<FormState>();
+  Ciudad? _ciudadSeleccionada;
+  final NasaApiServicio _nasaApiServicio = NasaApiServicio();
 
   DateTime _desde = DateTime.now();
   DateTime _hasta = DateTime.now();
@@ -23,9 +26,24 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
   // Variable de estado para controlar la carga
   bool _cargando = true;
 
-  void _calcularPaneles() {
+  Future<void> _calcularPaneles() async {
     if (_formKey.currentState!.validate()) {
-      //_resultado = "";
+      setState(() {
+        _resultado = 'Calculando...';
+      });
+      final consumoKw = double.tryParse(_txtConsumo.text);
+      if (_ciudadSeleccionada != null && consumoKw != null) {
+        final radiacionPromedio = await _nasaApiServicio.getRadiacionSolar(
+          _ciudadSeleccionada!.latitud,
+          _ciudadSeleccionada!.longitud,
+          _desde,
+          _hasta,
+        );
+
+        if (radiacionPromedio > 0) {
+          //calculo de los paneles
+        }
+      }
     }
   }
 
@@ -68,7 +86,13 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
                       child: Text(ciudad.nombre),
                     );
                   }).toList(),
-                  onChanged: (valor) {},
+                  onChanged: (Ciudad? ciudad) {
+                    setState(() {
+                      _ciudadSeleccionada = ciudad;
+                    });
+                  },
+                  validator: (ciudad) =>
+                      ciudad == null ? "Debe seleccionar la ciudad" : null,
                 ),
               const SizedBox(height: 16),
               Row(

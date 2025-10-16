@@ -42,6 +42,22 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
 
         if (radiacionPromedio > 0) {
           //calculo de los paneles
+          const eficienciaPanel = 0.2;
+          const areaPanel = 1.7;
+
+          final energiaGeneradaPanelDiaria =
+              (radiacionPromedio * eficienciaPanel * areaPanel) / 1000;
+          final panelesNecesarios = consumoKw / 30 / energiaGeneradaPanelDiaria;
+
+          setState(() {
+            _resultado =
+                'Se necesitam ${panelesNecesarios.ceil()} paneles solares';
+          });
+        } else {
+          setState(() {
+            _resultado =
+                "No se pudo obtener la radación. Pruebe intentar en otras fechas";
+          });
         }
       }
     }
@@ -74,6 +90,7 @@ class _CalculadoraPanelesState extends State<CalculadoraPaneles> {
       appBar: AppBar(title: const Text('Calculadora de Paneles Solares')),
       body: SingleChildScrollView(
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               if (_cargando)

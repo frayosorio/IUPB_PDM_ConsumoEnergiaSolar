@@ -26,7 +26,7 @@ class NasaApiServicio {
       final valores = datos["properties"]["parameter"]["ALLSKY_SFC_SW_DWN"];
       if (valores != null && valores.isNotEmpty) {
         final radiacionTotal = valores.values.reduce(
-          (suma, valor) => {suma + (valor ?? 0)},
+          (suma, valor) => suma + (valor ?? 0),
         );
         final promedioRadiacion = radiacionTotal / valores.length;
         return promedioRadiacion;
